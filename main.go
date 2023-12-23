@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/PrinceNarteh/go-users/configs"
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
 )
@@ -13,6 +14,9 @@ func main() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatal("Error loading .env file")
 	}
+
+	// connect to database
+	configs.ConnectDB()
 
 	// creating fiber instance
 	app := fiber.New()
