@@ -2,9 +2,9 @@ package main
 
 import (
 	"log"
-	"net/http"
 
 	"github.com/PrinceNarteh/go-users/configs"
+	"github.com/PrinceNarteh/go-users/routes"
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
 )
@@ -21,9 +21,8 @@ func main() {
 	// creating fiber instance
 	app := fiber.New()
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.Status(http.StatusOK).JSON(&fiber.Map{"message": "API running"})
-	})
+	// routes
+	routes.UserRoute(app)
 
 	app.Listen(":4000")
 }
