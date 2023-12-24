@@ -2,6 +2,7 @@ package configs
 
 import (
 	"context"
+	"log"
 	"os"
 	"time"
 
@@ -9,23 +10,19 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type DB struct {
-	client *mongo.Client
-}
+var DB *mongo.Client
 
-func ConnectDB() (*DB, error) {
+func ConnectDB() {
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 
 	if client, err := mongo.Connect(ctx, options.Client().ApplyURI(os.Getenv("MONGO_URI"))); err != nil {
-		return nil, err
+		log.Fatal(err)
 	} else {
-		return &DB{
-			client: client,
-		}, nil
+		DB = client
 	}
 }
 
-func (db *DB) GetCollection(collectionName string) *mongo.Collection {
-	return db.client.Database("go_users").Collection(collectionName)
+func GetCollection(db *mongo.Client, collectionName string) *mongo.Collection {
+	return db.Database("go_users").Collection(collectionName)
 }
