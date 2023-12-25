@@ -8,19 +8,24 @@ import (
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
 var DB *mongo.Client
 
 func ConnectDB() {
-	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	if client, err := mongo.Connect(ctx, options.Client().ApplyURI(os.Getenv("MONGO_URI"))); err != nil {
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(os.Getenv("MONGO_URI")))
+	if err != nil {
 		log.Fatal(err)
-	} else {
-		DB = client
 	}
+
+	if err = client.Ping(ctx, readpref.Primary()); err != nil {
+		log.Fatal(err)
+	}
+	DB = client
 }
 
 func GetCollection(db *mongo.Client, collectionName string) *mongo.Collection {

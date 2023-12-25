@@ -1,9 +1,9 @@
 package responses
 
-import "github.com/gofiber/fiber/v2"
+import "github.com/PrinceNarteh/go-users/models"
 
 type UserResponse struct {
-	Status  int        `json:"status"`
-	Message string     `json:"message"`
-	Data    *fiber.Map `json:"data"`
+	Status     string      `json:"status"`
+	StatusCode int         `json:"statusCode"`
+	Data       models.User `json:"data"`
 }
